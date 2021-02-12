@@ -4,3 +4,34 @@
 .cursor-pointer {
     cursor: pointer;
 }
+
+.drink-types {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 200px;
+    height: 100vh;
+    background-color: bisque;
+}
+
+.drinks-header {
+    width: 100%;
+    text-align: center;
+    text-decoration: underline;
+    height: 100px;
+    background-color: lightcyan;
+}
+
+.filtered-drinks {
+    width: 90%
+}
+
+.drinks-cards {
+    background-color: coral;
+    width: 20rem;
+    height: 30rem;
+}
+
+img {
+    border-radius: 200px;
+}
