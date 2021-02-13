@@ -1,7 +1,6 @@
 import { TitleCasePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, } from '@angular/core';
-import { Observable } from 'rxjs';
+import { CocktailSortService } from '../services/cocktail-sort.service'
 
 @Component({
   selector: 'app-cocktail-sort-system',
@@ -15,9 +14,9 @@ export class CocktailSortSystemComponent implements OnInit {
    */
   public cocktails: any[];
   /**
-   * string value to show that drinks are being loaded
+   * boolean value to show that drinks are being loaded
    */
-  public loading: string;
+  public loading: boolean;
   /**
    * array to show types of ingredients
    */
@@ -30,8 +29,10 @@ export class CocktailSortSystemComponent implements OnInit {
    * array to store type of drink types available
    */
   public drinks: Drinks[];
-  
-  constructor(private http: HttpClient, private titlecasePipe: TitleCasePipe) {
+
+  constructor(
+    private titlecasePipe: TitleCasePipe,
+    private cocktailSortService: CocktailSortService) {
     this.cocktails = [];
     this.ingredients = [];
     this.sortedDrinks = [];
@@ -71,37 +72,27 @@ export class CocktailSortSystemComponent implements OnInit {
    * initializes the component
    * @returns void
    */
-  public ngOnInit(): void {  }
-
-  /**
-   * method to make api call and fetch data
-   * @param url string
-   * @returns Observable<any>
-   */
-  public getApiData(url: string): Observable<any> {
-    url = `https://www.thecocktaildb.com/api/json/v1/1/${url}`;
-    return this.http.get(url);
-  }
+  public ngOnInit(): void { }
 
   /**
    * method to get cocktail data
-   * @param url string
+   * @param drinkType string
    * @returns void
    */
-  public getCocktailDetails(url: string): void {
-    if (url === 'resetSelection') {
+  public getCocktailDetails(drinkType: string): void {
+    if (drinkType === '' || drinkType === 'resetSelection') {
       this.resetAll();
       return;
     }
     this.cocktails = [];
-    this.loading = 'Loading Drinks';
-    this.getApiData(url).subscribe((data) => {
+    this.loading = true;
+    this.cocktailSortService.getApiData(drinkType).subscribe((data) => {
       data.drinks.filter((drink) => {
         this.cocktails.push(drink);
-        url.includes('margarita') ? this.getIngredients(drink) : this.ingredients = [];
+        drinkType.includes('margarita') ? this.getIngredients(drink) : this.ingredients = [];
       });
       this.sortedDrinks = [];
-      this.loading = '';
+      this.loading = false;
     });
   }
 
@@ -115,7 +106,7 @@ export class CocktailSortSystemComponent implements OnInit {
     this.cocktails.filter((drink) => {
       for (const key in drink) {
         const ingredient = this.titlecasePipe.transform(drink[key]);
-        if (ingredient === type) {            
+        if (ingredient === type) {
           this.sortedDrinks.push(drink);
         }
       }
@@ -130,7 +121,7 @@ export class CocktailSortSystemComponent implements OnInit {
   private getIngredients(drink): void {
     for (const key in drink) {
       const ingredient = this.titlecasePipe.transform(drink[key]);
-      if (key.includes('strIngredient') && drink[key] !== null && !this.ingredients.includes(ingredient)) {            
+      if (key.includes('strIngredient') && drink[key] !== null && !this.ingredients.includes(ingredient)) {
         this.ingredients.push(ingredient);
       }
     }
@@ -144,7 +135,7 @@ export class CocktailSortSystemComponent implements OnInit {
     this.cocktails = [];
     this.ingredients = [];
     this.sortedDrinks = [];
-    this.loading = '';
+    this.loading = false;
   }
 }
 
