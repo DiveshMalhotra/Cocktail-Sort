@@ -22,7 +22,7 @@
 </div>
 <div *ngIf="cocktails?.length > 0" class="container row">
     <ng-container *ngFor="let drink of cocktails">
-        <div *ngIf="sortedDrinks?.length < 1" class="col-4 mt-2" tabindex="1">
+        <div *ngIf="sortedDrinks?.length < 1" class="col-4 mt-2 no-outline" tabindex="1">
             <div class="card drinks-cards">
                 <img src="{{ drink?.strDrinkThumb }}" class="card-img-top" alt="{{ drink?.strDrink }}">
                 <div class="card-body">

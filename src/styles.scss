@@ -31,10 +31,14 @@ h1 {
 
 .drinks-cards {
     background-color: coral;
-    width: 20rem;
+    width: 22rem;
     height: 30rem;
 }
 
 img {
     border-radius: 200px;
+}
+
+.no-outline {
+    outline: none;
 }
